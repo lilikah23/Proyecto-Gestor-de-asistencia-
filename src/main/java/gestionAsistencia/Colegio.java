@@ -1,22 +1,72 @@
 package gestionAsistencia;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.time.LocalDate;
 
 public class Colegio {
     private String nombre;
-    private List<Alumno> alumnos; 
-    private Map<String, Alumno> mapaAlumnos; // búsqueda rápida por RUT
-    private Map<Alumno, List<Asistencia>> registroAsistencias; // alumno -> lista de asistencias
-    
+    private List<Alumno> alumnos;  
+    private Map<Integer, List<Asistencia>> registroAsistencias; // <AlumnoID, Lista de asistencias>
+
     // Constructor
     public Colegio(String nombre) {
         this.nombre = nombre;
         this.alumnos = new ArrayList<>();
-        this.mapaAlumnos = new HashMap<>();
         this.registroAsistencias = new HashMap<>();
+    }
+
+    // Métodos para manejar alumnos
+    public void agregarAlumno(Alumno alumno) {
+        alumnos.add(alumno);
+        registroAsistencias.put(alumno.getId(), new ArrayList<>());
+    }
+
+    public void mostrarAlumnos() {
+        for (Alumno a : alumnos) {
+            System.out.println(a);
+        }
+    }
+
+    // Métodos para registrar asistencia
+    public void registrarAsistencia(int idAlumno, LocalDate fecha, boolean presente) {
+        Asistencia asistencia = new Asistencia(fecha, presente);
+        if (registroAsistencias.containsKey(idAlumno)) {
+            registroAsistencias.get(idAlumno).add(asistencia);
+        } else {
+            System.out.println("Alumno con ID " + idAlumno + " no encontrado.");
+        }
+    }
+
+    // Sobrecarga (SIA1.6): asistencia con salida anticipada
+    public void registrarAsistencia(int idAlumno, LocalDate fecha, boolean presente, boolean salidaAnticipada) {
+        Asistencia asistencia = new Asistencia(fecha, presente, salidaAnticipada);
+        if (registroAsistencias.containsKey(idAlumno)) {
+            registroAsistencias.get(idAlumno).add(asistencia);
+        } else {
+            System.out.println("Alumno con ID " + idAlumno + " no encontrado.");
+        }
+    }
+
+    // Mostrar asistencias de un alumno
+    public void mostrarAsistenciasDeAlumno(int idAlumno) {
+        if (registroAsistencias.containsKey(idAlumno)) {
+            System.out.println("Asistencias del alumno " + idAlumno + ":");
+            for (Asistencia a : registroAsistencias.get(idAlumno)) {
+                System.out.println(a);
+            }
+        } else {
+            System.out.println("Alumno con ID " + idAlumno + " no encontrado.");
+        }
+    }
+
+    // Mostrar todo el registro del colegio
+    public void mostrarAsistenciasGenerales() {
+        for (Map.Entry<Integer, List<Asistencia>> entry : registroAsistencias.entrySet()) {
+            System.out.println("Alumno ID " + entry.getKey() + ":");
+            for (Asistencia a : entry.getValue()) {
+                System.out.println("  " + a);
+            }
+        }
     }
 
     // Getters y Setters
@@ -30,42 +80,5 @@ public class Colegio {
 
     public List<Alumno> getAlumnos() {
         return alumnos;
-    }
-
-    public Map<String, Alumno> getMapaAlumnos() {
-        return mapaAlumnos;
-    }
-
-    public Map<Alumno, List<Asistencia>> getRegistroAsistencias() {
-        return registroAsistencias;
-    }
-
-    // Métodos para agregar alumnos
-    public void agregarAlumno(Alumno alumno) {
-        alumnos.add(alumno);
-        mapaAlumnos.put(alumno.getRut(), alumno);
-        registroAsistencias.put(alumno, new ArrayList<>()); // inicializa su lista de asistencias
-    }
-
-    // Método para registrar asistencia
-    public void registrarAsistencia(Alumno alumno, Asistencia asistencia) {
-        if (registroAsistencias.containsKey(alumno)) {
-            registroAsistencias.get(alumno).add(asistencia);
-        }
-    }
-
-    // Sobrecarga de métodos: registrar asistencia por ID de alumno
-    public void registrarAsistencia(String rut, Asistencia asistencia) {
-        Alumno alumno = mapaAlumnos.get(rut);
-        if (alumno != null) {
-            registrarAsistencia(alumno, asistencia);
-        }
-    }
-
-    // Mostrar alumnos
-    public void mostrarAlumnos() {
-        for (Alumno a : alumnos) {
-            System.out.println(a);
-        }
     }
 }
