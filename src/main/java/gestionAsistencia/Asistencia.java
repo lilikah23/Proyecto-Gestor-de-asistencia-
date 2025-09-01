@@ -16,7 +16,7 @@ public class Asistencia {
         this.inasistenciaJustificada = false;
     }
 
-    // Sobrecarga de métodos (SIA1.6)
+    // Sobrecarga de métodos
     public Asistencia(LocalDate fecha, boolean presente, boolean salidaAnticipada) {
         this.fecha = fecha;
         this.presente = presente;
@@ -24,7 +24,7 @@ public class Asistencia {
         this.inasistenciaJustificada = false;
     }
 
-    // Getters y Setters
+    // Getters y Setters (sin cambios)
     public LocalDate getFecha() {
         return fecha;
     }
@@ -59,8 +59,15 @@ public class Asistencia {
 
     @Override
     public String toString() {
-        return "Asistencia [Fecha=" + fecha + ", Presente=" + presente +
-               ", Salida anticipada=" + salidaAnticipada +
-               ", Inasistencia justificada=" + inasistenciaJustificada + "]";
+        // Convertimos los valores booleanos a texto "SI" o "NO"
+        String presenteStr = presente ? "SI" : "NO";
+        String salidaAnticipadaStr = salidaAnticipada ? "SI" : "NO";
+        String inasistenciaJustificadaStr = inasistenciaJustificada ? "SI" : "NO";
+
+        // Usamos las nuevas variables de texto en el resultado final
+        return "Asistencia [Fecha=" + fecha + ", Presente=" + presenteStr +
+               ", Salida anticipada=" + salidaAnticipadaStr +
+               ", Inasistencia justificada=" + inasistenciaJustificadaStr + "]";
     }
+
 }

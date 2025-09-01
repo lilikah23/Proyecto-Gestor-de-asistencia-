@@ -16,11 +16,23 @@ public class Colegio {
     }
 
     // Métodos para manejar alumnos
-    public void agregarAlumno(Alumno alumno) {
-        alumnos.add(alumno);
-        registroAsistencias.put(alumno.getId(), new ArrayList<>());
+    public boolean agregarAlumno(Alumno alumno) {
+    if (existeAlumno(alumno.getId())) {
+        return false; // Indica que no se pudo agregar porque ya existe
     }
+    alumnos.add(alumno);
+    registroAsistencias.put(alumno.getId(), new ArrayList<>());
+    return true; // Indica que se agregó con éxito
+}
 
+    public boolean existeAlumno(int id) {
+    for (Alumno alumno : alumnos) {
+        if (alumno.getId() == id) {
+            return true; // Si lo encuentra, devuelve verdadero
+        }
+    }
+    return false; // Si termina el ciclo sin encontrarlo, devuelve falso
+}
     public void mostrarAlumnos() {
         for (Alumno a : alumnos) {
             System.out.println(a);

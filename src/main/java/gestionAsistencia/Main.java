@@ -26,29 +26,31 @@ public class Main {
                     String rutStr = scanner.nextLine();
                     int id;
                     try {
-                        // Convertir RUT a número eliminando puntos y guion
                         String rutNumerico = rutStr.replace(".", "").replace("-", "");
                         id = Integer.parseInt(rutNumerico);
                     } catch (NumberFormatException e) {
                         System.out.println("RUT inválido. Debe ser un número.");
                         break;
                     }
+                    if (colegio.existeAlumno(id)) {
+                        System.out.println("Error: El alumno con ID " + id + " ya se encuentra registrado.");
+                    } else {
+                        System.out.print("Ingrese nombre: ");
+                        String nombre = scanner.nextLine();
 
-                    System.out.print("Ingrese nombre: ");
-                    String nombre = scanner.nextLine();
+                        System.out.print("Ingrese curso: ");
+                        String curso = scanner.nextLine();
 
-                    System.out.print("Ingrese curso: ");
-                    String curso = scanner.nextLine();
-
-                    Alumno alumno = new Alumno(id, nombre, curso);
-                    colegio.agregarAlumno(alumno);
-                    System.out.println("Alumno agregado correctamente.");
+                        Alumno nuevoAlumno = new Alumno(id, nombre, curso);
+                        colegio.agregarAlumno(nuevoAlumno); // Ya no necesitamos verificar el resultado aquí
+                        System.out.println("Alumno agregado correctamente.");
+                    }
                 }
 
                 case 2 -> {
                     System.out.print("Ingrese ID del alumno: ");
                     int idAlumno = scanner.nextInt();
-                    scanner.nextLine();
+                    scanner.nextLine(); // Consumir salto de línea
 
                     System.out.print("Ingrese fecha (YYYY-MM-DD): ");
                     String fechaStr = scanner.nextLine();
@@ -60,14 +62,18 @@ public class Main {
                         break;
                     }
 
-                    System.out.print("¿Presente? (true/false): ");
-                    boolean presente = scanner.nextBoolean();
+                    System.out.print("¿Presente? (SI/NO): ");
+                    String respuestaPresente = scanner.nextLine();
+                    boolean presente = respuestaPresente.equalsIgnoreCase("SI");
 
-                    System.out.print("¿Salida anticipada? (true/false): ");
-                    boolean salidaAnticipada = scanner.nextBoolean();
-                    scanner.nextLine();
+                    boolean salidaAnticipada = false;
 
-                    // Registrar asistencia con sobrecarga
+                    if (presente) {
+                        System.out.print("¿Salida anticipada? (SI/NO): ");
+                        String respuestaSalida = scanner.nextLine();
+                        salidaAnticipada = respuestaSalida.equalsIgnoreCase("SI");
+                    }
+
                     colegio.registrarAsistencia(idAlumno, fecha, presente, salidaAnticipada);
                     System.out.println("Asistencia registrada correctamente.");
                 }
