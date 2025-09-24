@@ -1,0 +1,1 @@
+package edu.colegio.model; public enum EstadoAsistencia { PRESENTE, AUSENTE, SALIDA_ANTICIPADA }
