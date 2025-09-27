@@ -39,7 +39,7 @@ public class SearchStudentWindow extends JFrame {
         // Bucle para llenar la tabla con los filtros aplicados
         for (Asistencia as : a.getAsistencias()) {
             
-            // <-- CAMBIO 1: Filtro para mostrar solo desde marzo (mes 3) a diciembre (mes 12)
+            //: Filtro para mostrar solo desde marzo (mes 3) a diciembre (mes 12)
             int mes = as.getFecha().getMonthValue();
             if (mes >= 3 && mes <= 12) {
                 
@@ -52,7 +52,7 @@ public class SearchStudentWindow extends JFrame {
                     motivo = ac.getMotivo();
                 }
 
-                // <-- CAMBIO 2: Convertir el valor booleano 'just' a "Sí" o "No"
+                //: Convertir el valor booleano 'just' a "Sí" o "No"
                 String justificadaTexto = just ? "Sí" : "No";
 
                 model.addRow(new Object[]{as.getFecha(), as.getEstado(), justificadaTexto, motivo});

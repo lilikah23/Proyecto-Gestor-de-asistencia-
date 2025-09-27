@@ -60,9 +60,7 @@ public class Colegio {
         }
     }
 
-    // ================================================================= //
-    // == NUEVO MÉTODO PARA CALCULAR ESTADÍSTICAS DE CURSOS           == //
-    // ================================================================= //
+
     public List<CursoResumen> generarResumenCursos(int anio, double umbralCritico) {
         List<CursoResumen> resumenes = new ArrayList<>();
         List<Curso> cursosDelAnio = getCursosPorAnio(anio);

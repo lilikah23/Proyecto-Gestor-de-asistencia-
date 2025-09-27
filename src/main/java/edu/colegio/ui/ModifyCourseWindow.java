@@ -35,7 +35,7 @@ public class ModifyCourseWindow extends JFrame {
         }
         mainPanel.add(cbCursos);
 
-        // <-- CAMBIO: Se actualiza el texto de la etiqueta
+     //Se actualiza el texto de la etiqueta
         mainPanel.add(new JLabel("Nuevo nombre:"));
         txtNuevoNombre = new JTextField();
         mainPanel.add(txtNuevoNombre);

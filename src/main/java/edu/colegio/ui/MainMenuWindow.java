@@ -2,10 +2,12 @@ package edu.colegio.ui;
 
 import edu.colegio.model.*;
 import edu.colegio.persistence.PersistenceManager;
+import edu.colegio.persistence.ReporteManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.List;
 
 public class MainMenuWindow extends JFrame {
@@ -32,7 +34,7 @@ public class MainMenuWindow extends JFrame {
 
         // --- Botones del Menú ---
         
-        // <-- CAMBIO: La acción de este botón ahora es más compleja
+  
         JButton btnListar = createButton("Listar cursos", () -> {
             // 1. Mostrar el diálogo de ordenación
             SortCoursesDialog dialog = new SortCoursesDialog(this);
@@ -68,12 +70,45 @@ public class MainMenuWindow extends JFrame {
 
         add(panel);
         setLocationRelativeTo(null);
+        
+        JButton btnGenerarReporte = createButton("Generar Reporte de Curso", () -> {
+    // Lógica para seleccionar un curso y generar el reporte
+    try {
+        List<Curso> cursos = colegio.getCursosPorAnio(year);
+        if (cursos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay cursos en este año para generar reportes.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        Curso cursoSeleccionado = (Curso) JOptionPane.showInputDialog(this, "Seleccione un curso para el reporte:",
+                "Generar Reporte", JOptionPane.QUESTION_MESSAGE, null, cursos.toArray(), cursos.get(0));
+        
+        if (cursoSeleccionado != null) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar Reporte");
+            fileChooser.setSelectedFile(new File("Reporte_" + cursoSeleccionado.getId() + ".txt"));
+
+            int userSelection = fileChooser.showSaveDialog(this);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File archivoParaGuardar = fileChooser.getSelectedFile();
+                ReporteManager.generarReporteAsistenciaCurso(cursoSeleccionado, archivoParaGuardar.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "Reporte generado con éxito en:\n" + archivoParaGuardar.getAbsolutePath());
+            }
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+});
+
+// Añade el botón al panel
+panel.add(btnGenerarReporte);
     }
 
     private JButton createButton(String text, Runnable action) {
         JButton button = new JButton(text);
         button.addActionListener(e -> action.run());
         return button;
+        
     }
     
     private void guardarYSalir() {
@@ -86,4 +121,6 @@ public class MainMenuWindow extends JFrame {
         }
         dispose();
     }
+    
+    
 }
